@@ -1,0 +1,107 @@
+{% from 'macros.html' import follow_area with context %} {% from
+'bootstrap5/nav.html' import render_nav_item %}
+<div class="row row-cols-auto">
+  <div class="col">
+    <a
+      href="{% if current_user == user %}{{ url_for('.change_avatar') }}{% else %}#{% endif %}"
+      title="Change avatar"
+    >
+      <img
+        class="rounded avatar-l"
+        src="{{ url_for('main.get_avatar', filename=user.avatar_l) }}"
+      />
+    </a>
+  </div>
+  <div class="col">
+    <h1>
+      {{ user.name }}
+      <small class="text-muted">{{ user.username }}</small>
+    </h1>
+    {% if user.bio %}
+    <p>{{ user.bio }}</p>
+    {% endif %}
+    <p>
+      {% if user.website %} {{ render_icon('link-45deg') }}
+      <a
+        class="text-decoration-none text-dark"
+        href="{{ user.website }}"
+        target="_blank"
+        >{{ user.website|truncate(30) }}</a
+      >&nbsp;&nbsp; {% endif %} {% if user.location %} {{ render_icon('pin-map')
+      }}
+      <a
+        class="text-decoration-none text-dark"
+        href="https://www.google.com/maps?q={{ user.location }}"
+        target="_blank"
+        >{{ user.location|truncate(30) }}</a
+      >&nbsp;&nbsp; {% endif %} {{ render_icon('calendar') }} Joined
+      <span class="dayjs" data-format="LL">{{ user.member_since }}</span>
+    </p>
+    <div>
+      {% if current_user != user %} {% if current_user.can(Permission.MODERATE)
+      %} {% if user.locked %}
+      <form
+        class="inline"
+        action="{{ url_for('admin.unlock_user', id=user.id) }}"
+        method="post"
+      >
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+        <input type="submit" class="btn btn-secondary btn-sm" value="Unlock" />
+      </form>
+      {% else %}
+      <form
+        class="inline"
+        action="{{ url_for('admin.lock_user', id=user.id) }}"
+        method="post"
+      >
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+        <input type="submit" class="btn btn-warning btn-sm" value="Lock" />
+      </form>
+      {% endif %} {% if user.active %}
+      <form
+        class="inline"
+        action="{{ url_for('admin.block_user', id=user.id) }}"
+        method="post"
+      >
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+        <input type="submit" class="btn btn-warning btn-sm" value="Block" />
+      </form>
+      {% else %}
+      <form
+        class="inline"
+        action="{{ url_for('admin.unblock_user', id=user.id) }}"
+        method="post"
+      >
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+        <input type="submit" class="btn btn-secondary btn-sm" value="Unblock" />
+      </form>
+      {% endif %}
+      <a class="btn btn-light btn-sm" href="mailto:{{ user.email }}">Email</a>
+      {% endif %} {% if current_user.is_admin %}
+      <a
+        class="btn btn-warning btn-sm"
+        href="{{ url_for('admin.edit_profile_admin', id=user.id) }}"
+        >Edit profile</a
+      >
+      {% endif %} {% endif %} {{ follow_area(user) }} {% if
+      current_user.is_authenticated and user == current_user %}
+      <a
+        class="btn btn-outline-primary btn-sm"
+        href="{{ url_for('.edit_profile') }}"
+        >Edit profile</a
+      >
+      {% endif %}
+    </div>
+  </div>
+</div>
+<div class="user-nav">
+  <ul class="nav nav-tabs">
+    {{ render_nav_item('user.index', 'Photo', _badge=user.photos_count,
+    username=user.username) }} {{ render_nav_item('user.show_collections',
+    'Collections', _badge=user.collections_count, username=user.username) }} {{
+    render_nav_item('user.show_following', 'Following',
+    _badge=user.following_count, username=user.username) }} {{
+    render_nav_item('user.show_followers', 'Followers',
+    _badge=user.followers_count, username=user.username) }}
+  </ul>
+</div>

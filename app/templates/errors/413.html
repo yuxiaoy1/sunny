@@ -1,0 +1,21 @@
+{% extends 'base.html' %} {% block content %}
+<div class="d-flex justify-content-center align-items-center">
+  <div class="card w-50 bg-light mt-5 mb-5">
+    <img
+      class="card-img-top"
+      src="{{ url_for('static', filename='images/error.jpg') }}"
+    />
+    <div class="card-body">
+      <h5 class="card-title">413 Error</h5>
+      <p class="card-text">{{ description|default('File Too Large') }}</p>
+    </div>
+    <div class="card-footer">
+      <div class="float-end">
+        <a class="btn btn-primary" href="{{ url_for('main.index') }}"
+          >Return Home</a
+        >
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

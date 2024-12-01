@@ -1,0 +1,27 @@
+{% extends 'base.html' %} {% from 'bootstrap5/pagination.html' import
+render_pagination %} {% from 'macros.html' import user_card with context %} {%
+block content %}
+<div class="page-header">
+  <div class="row">
+    <div class="col-md-12">
+      <a
+        class="btn btn-light btn-sm"
+        href="{{ url_for('main.show_photo', id=photo.id) }}"
+      >
+        {{ render_icon('arrow-left') }} Return
+      </a>
+    </div>
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-12">
+    <h3>{{ collections|length }} Collectors</h3>
+    {% for collection in collections %} {{ user_card(user=collection.user) }} {%
+    endfor %}
+  </div>
+</div>
+{% if collections %}
+<div class="page-footer">
+  {{ render_pagination(pagination, align='center') }}
+</div>
+{% endif %} {% endblock %}

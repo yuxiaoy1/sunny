@@ -1,0 +1,49 @@
+<div class="card bg-light mb-3">
+  <div class="card-body">
+    <div class="row row-cols-auto mb-3">
+      <div class="col">
+        <a href="{{ url_for('user.index', username=current_user.username) }}">
+          <img
+            class="rounded avatar-s"
+            src="{{ url_for('main.get_avatar', filename=current_user.avatar_m) }}"
+          />
+        </a>
+      </div>
+      <div class="col">
+        <h6 class="card-title">
+          <a
+            class="text-decoration-none"
+            href="{{ url_for('user.index', username=current_user.username) }}"
+            >{{ current_user.name }}
+          </a>
+        </h6>
+        <p class="card-subtitle text-muted">{{ current_user.username }}</p>
+      </div>
+    </div>
+    <a
+      class="card-link text-decoration-none text-dark"
+      href="{{ url_for('user.index', username=current_user.username) }}"
+    >
+      {{ render_icon('house-fill') }} My Photos </a
+    ><br />
+    <a
+      class="card-link text-decoration-none text-dark"
+      href="{{ url_for('user.show_collections', username=current_user.username) }}"
+    >
+      {{ render_icon('suit-heart-fill') }} My Collections
+    </a>
+  </div>
+</div>
+<div class="card bg-light mb-3">
+  <div class="card-header">Hot Tags</div>
+  <div class="list-group list-group-flush">
+    {% for tag in tags %}
+    <a class="list-group-item" href="{{ url_for('.show_tag', id=tag.id) }}"
+      >{{ tag.name }}
+      <span class="badge text-bg-light rounded-pill"
+        >{{ tag.photos_count }}</span
+      >
+    </a>
+    {% endfor %}
+  </div>
+</div>

@@ -1,0 +1,14 @@
+aiosmtpd
+bootstrap-flask
+email-validator
+faker
+flask
+flask-sqlalchemy
+flask-whooshee
+flask-mailman
+flask-login
+flask-avatars
+flask-dropzone
+flask-wtf
+pillow
+pyjwt
